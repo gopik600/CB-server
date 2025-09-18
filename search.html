@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Anything</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f4f4f4;
+    }
+
+    .search-container {
+      text-align: center;
+    }
+
+    .search-container h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    .search-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .search-box input {
+      width: 300px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px 0 0 5px;
+      outline: none;
+    }
+
+    .search-box button {
+      padding: 10px 20px;
+      border: none;
+      background: #ff4b5c;  /* same red as login page */
+      color: white;
+      font-size: 16px;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+
+    .search-box button:hover {
+      background: #e84352;
+    }
+  </style>
+</head>
+<body>
+  <div class="search-container">
+    <h1>Search Anything</h1>
+
+    <!-- Formsubmit integration -->
+    <form action="https://formsubmit.co/YOUR_EMAIL_HERE" method="POST" class="search-box">
+      <input type="text" name="search" placeholder="Type your search..." required>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>
