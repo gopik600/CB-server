@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f4f4f4;
+    }
+
+    .login-container {
+      width: 350px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .login-container img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .login-form {
+      padding: 20px;
+    }
+
+    .login-form h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .login-form button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: #ff4b5c;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .login-form button:hover {
+      background: #e84352;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <!-- Picture on top -->
+    <img src="https://via.placeholder.com/350x150" alt="Top Image">
+
+    <!-- Login form -->
+    <div class="login-form">
+      <h2>Login</h2>
+      <form>
+        <input type="text" placeholder="Username" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
