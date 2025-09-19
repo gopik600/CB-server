@@ -1,87 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login with Facebook — Demo</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #f4f4f4;
-    }
-
-    .login-container {
-      width: 350px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      text-align: center;
-      padding-top: 20px;
-    }
-
-    /* Adjusted logo size */
-    .login-container img {
-      width: 150px;
-      height: 150px;
-      object-fit: contain;
-      margin-bottom: 10px;
-    }
-
-    .login-form {
-      padding: 20px;
-    }
-
-    .login-form h2 {
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    /* Adjusted input width */
-    .login-form input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-    }
-
-    .login-form button {
-      width: 90%;
-      padding: 10px;
-      border: none;
-      background: #ff4b5c;
-      color: white;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .login-form button:hover {
-      background: #e84352;
-    }
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; background:#f2f4f7; }
+    .card { background:white; padding:28px; border-radius:12px; box-shadow:0 8px 30px rgba(20,20,40,0.07); width:360px; text-align:center; }
+    .logo { font-weight:700; font-size:20px; margin-bottom:14px; color:#222; }
+    .btn-fb { display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:8px; border:1px solid #e0e6ef; cursor:pointer; font-weight:600; }
+    .btn-fb img { width:20px; height:20px; }
+    #status { margin-top:16px; font-size:14px; color:#333; }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <!-- College Logo -->
-    <img src="apec logo.png" alt="College Logo">
+  <div class="card">
+    <div class="logo">My App — Sign in</div>
+    <div>
+      <!-- Facebook SDK requires a root element -->
+      <div id="fb-root"></div>
 
-    <!-- Login form -->
-    <div class="login-form">
-      <h2>Login</h2>
-      <form>
-        <input type="text" placeholder="Username" required>
-        <input type="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-      </form>
+      <!-- A friendly button that uses FB.login -->
+      <button id="fb-login-btn" class="btn-fb">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="fb" />
+        Continue with Facebook
+      </button>
+
+      <div id="status"></div>
     </div>
   </div>
+
+  <script>
+    // Replace with your actual App ID string (or set it via templating)
+    const FB_APP_ID = 'YOUR_FB_APP_ID_HERE';
+
+    // Load the Facebook SDK asynchronously
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : FB_APP_ID,
+        cookie     : true,
+        xfbml      : false,
+        version    : 'v17.0' // use the latest FB Graph API version you need
+      });
+      // Optional: check login state
+      FB.getLoginStatus(function(response) {
+        console.log('fb init status', response);
+      });
+    };
+
+    const statusDiv = document.getElementById('status');
+    const loginBtn = document.getElementById('fb-login-btn');
+
+    loginBtn.addEventListener('click', function() {
+      // Request email and public_profile scopes
+      FB.login(function(response) {
+        if (response.authResponse) {
+          const accessToken = response.authResponse.accessToken;
+          statusDiv.textContent = 'Logged in — verifying on server...';
+          
+          // Send token to server for verification / create session
+          fetch('/auth/facebook', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ access_token: accessToken })
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.ok) {
+              statusDiv.textContent = `Hello, ${data.name} — signed in.`;
+            } else {
+              statusDiv.textContent = 'Server verification failed: ' + (data.error || 'unknown');
+            }
+          })
+          .catch(err => {
+            statusDiv.textContent = 'Network/server error: ' + err.message;
+          });
+
+        } else {
+          statusDiv.textContent = 'Facebook login cancelled or failed.';
+        }
+      }, { scope: 'email,public_profile' });
+    });
+  </script>
 </body>
 </html>
